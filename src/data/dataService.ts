@@ -45,7 +45,7 @@ export const removeNodeFromData = (
   data: Node[],
   tempIdToRemove: string
 ): Node[] => {
-  const removeNodeRecursive = (nodes: Node[]): Node[] => {
+  const removeNode = (nodes: Node[]): Node[] => {
     return nodes
       .filter((node) => node.__tempId !== tempIdToRemove)
       .map((node) => {
@@ -53,7 +53,7 @@ export const removeNodeFromData = (
           ...node,
           children: Object.keys(node.children).reduce((acc, key) => {
             acc[key] = {
-              records: removeNodeRecursive(node.children[key].records),
+              records: removeNode(node.children[key].records),
             };
             return acc;
           }, {} as Record<string, { records: Node[] }>),
@@ -61,5 +61,5 @@ export const removeNodeFromData = (
       });
   };
 
-  return removeNodeRecursive(data);
+  return removeNode(data);
 };
