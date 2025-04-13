@@ -1,7 +1,7 @@
 import React from "react";
 import TableHeader from "./TableHeader";
 import TableRow from "./TableRow";
-import { Node } from "../types";
+import { Node } from "../data/types";
 
 interface Props {
   data: Node[];

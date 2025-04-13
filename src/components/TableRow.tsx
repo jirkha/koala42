@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Node } from "../types";
+import { Node } from "../data/types";
 import NestedTable from "./NestedTable";
 
 interface Props {

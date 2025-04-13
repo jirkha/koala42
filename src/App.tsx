@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import HierarchyTable from "./components/HierarchyTable";
-import { Node } from "./types";
+import { Node } from "./data/types";
 import { fetchData, removeNodeFromData } from "./data/dataService";
 
 function App() {

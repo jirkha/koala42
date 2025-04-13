@@ -1,46 +1,80 @@
-# Getting Started with Create React App
+# Technical Assessment
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Description
 
-## Available Scripts
+Please, develop an application which creates a hierarchy table from input data in JSON format. Every item in JSON consists of its own data and array, which items represent child data. Item's data can have a variable number of attributes (key: value), and item can have a variable number of nested child items. When you click on an item, direct child items are hidden/shown.
 
-In the project directory, you can run:
+There are two attachments in the email you were sent. In those, you can see an example of data in JSON and an example screenshot of the hierarchy table component. 
 
-### `npm start`
+Use the attached “example-data.json” and create the hierarchy table application (similar to the screenshot). The application has data and view layers, which are clearly separated. Implement a "remove" button, which deletes an item in the data and view layer in your application. If an item has children items, they have to be deleted as well.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+## Scope
 
-### `npm test`
+* Usage of React.js/Vue/Angular
+* Usage of state management of your choice
+* Structure of medium-size production application
+* Focus on performance, code quality, correct usage of chosen technologies, data consistency
+* Design is not important
+* (Optional) Write down known issues and what you would done different if you have more time
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
 
-### `npm run build`
+## Architecture
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### General
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+For this app, I’ve used Create React App to make it easier and faster to start. Even though it's not already recommended. It could be built with Next.js framework for example, but my intention was to remain simple.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### Data Layer (src/data/)
 
-### `npm run eject`
+* Responsible for loading data from a JSON file (`dataService.tsx`, using `%PUBLIC_URL%`).
+* Defines the interface for data manipulation (`types.ts`).
+* Contains the logic for transforming and managing data, including a function to remove items and their descendants (`removeNodeFromData` in `dataService.tsx`).
+* Includes a function to add unique temporary IDs to each node (`addUniqueTempIds` in `dataService.tsx`) to handle recurring IDs.
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+### Presentation Layer (src/components/, src/App.tsx)
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+* It contains React components for rendering the user interface
+* Uses component state (`useState`) to implement the logic for showing/hiding child items
+* The main application logic and state management are in `App.tsx`.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+With more time, I would implement a more responsive and mobile-friendly table.
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+## Technologies
 
-## Learn More
+* React.js
+* TypeScript
+* Tailwind CSS: A utility-first CSS framework for flexible styling directly in the HTML (JSX) code
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+## Components Structure
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+The following component structure was designed to display the hierarchical table:
+
+* `App.tsx`: The main component responsible for fetching data, managing the application state (including the data and the remove node function), and rendering the `HierarchyTable`. It also displays the application title and the Koala42 logo.
+* `HierarchyTable.tsx`: The primary component responsible for displaying the table for a particular level of the hierarchy.
+* `TableHeader.tsx`: A component to display the table headers based on the keys of the data objects.
+* `TableRow.tsx`: A component responsible for rendering a single row in the table. It displays the data for each item and includes the "Remove" button and the toggle button for showing and hiding child rows. It conditionally renders `NestedTable` for child items.
+* `NestedTable.tsx`: A component that renders a nested table for the child items of a row. It receives the child data and renders `TableRow` components for them.
+
+## Data Communication
+
+Regarding the requirement for a medium-size production application structure, the data is loaded using `fetch` from data located in the `public` folder.
+
+The data is then processed (unique IDs are added) and passed to the presentation layer (`App.tsx`) as state.
+
+The `data` state and the `handleRemoveNode` function are passed down as props to the `HierarchyTable` component and further to its child components.
+
+## Removing Items
+
+The logic for removing items and their children is implemented in the data service layer (`removeNodeFromData` in `dataService.tsx`).
+
+When the "Remove" button is clicked in the presentation layer (`TableRow`), the `onRemoveNode` prop (which points to the `handleRemoveNode` function in `App.tsx`) is called.
+
+`handleRemoveNode` updates the application state by calling `removeNodeFromData` and setting the new data, which triggers a re-render of the UI.
+
+## Problems during development
+
+* There was a specific issue with the item that had the ID number 48, "Zaphod Beeblebrox". I needed to figure out the correct way for the application to handle its ID.
+* I had some trouble figuring out how deep the tables were nested. This made them not look right.
+* I changed how the code was split into different parts (components). This was because I was trying to find the best way to organize it.
+* The "Remove" button functionality was initially broken due to incorrect passing of information (props) between components.
