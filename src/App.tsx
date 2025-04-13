@@ -28,7 +28,7 @@ function App() {
       {data.length > 0 ? (
         <HierarchyTable data={data} onRemoveNode={handleRemoveNode} />
       ) : (
-        <p>Načítání dat...</p>
+        <p>Nejsou k dispozici data</p>
       )}
     </div>
   );
